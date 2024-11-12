@@ -1,6 +1,6 @@
 ---
-title: 'My First Article'
-date: '2024-11-01'
+title: 'My Second Article'
+date: '2024-11-02'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus tincidunt elementum elementum. Etiam laoreet lectus sit amet commodo condimentum. Curabitur ut libero ultrices, tincidunt nibh ut, vestibulum diam. Aenean rhoncus turpis purus, a mollis ligula ornare vitae. Vestibulum purus lectus, viverra ac maximus vel, pharetra in libero. Morbi eros ex, sollicitudin non turpis et, lobortis facilisis quam. Aliquam dapibus erat mi, sit amet malesuada nunc aliquam at. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris eros leo, vulputate non arcu sit amet, pellentesque cursus velit.
