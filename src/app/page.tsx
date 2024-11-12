@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { getSortedPosts } from "../model/posts.model";
 
-const Page = () => {
+const IndexPage = () => {
     const posts = getSortedPosts();
     
     return (
@@ -12,15 +13,17 @@ const Page = () => {
                 this  blog have and admin side where you’ll be asked to login in order to add, edit or delete articles.
             </p>
             <ul>
-                { posts.map(({ title, date }) => (
-                    <li>
-                        <div>{ title }</div>
-                        <div>{ date }</div>
-                    </li>
-                )) }
+                { 
+                    posts.map(({ title, date, slug }, index) => (
+                        <li key={`${title}-${index}`}>
+                            <div>{ date }</div>
+                            <Link href={`/posts/${slug}`}>{ title }</Link>
+                        </li>
+                    ))
+                }
             </ul>
         </>
     );
 };
 
-export default Page;
+export default IndexPage;
