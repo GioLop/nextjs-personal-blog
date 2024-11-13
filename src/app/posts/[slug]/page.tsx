@@ -8,7 +8,7 @@ const generateStaticParans = () => {
 const PostPage = async ({ params }) => {
     const { slug } = await params;
     
-    const post = await getPostData(slug);
+    const post = await getPostData({ slug });
     
     if (!post) {
         return <div>Post not found!</div>

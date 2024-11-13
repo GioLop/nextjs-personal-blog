@@ -10,13 +10,13 @@ const POST_DIRECTORY = path.join(process.cwd(), 'posts');
 
 const getPostsFiles = () => fs.readdirSync(POST_DIRECTORY);
 
-const getSlug = (file:string) => file.replace(/\.md$/, '');
+const getSlug = ({ file }: {file:string}) => file.replace(/\.md$/, '');
 
 const getSortedPosts = () => {
     const files = getPostsFiles();
     
     const postsData = files.map((file) => {
-        const slug = getSlug(file);
+        const slug = getSlug({ file });
         const filePath = path.join(POST_DIRECTORY, file);
         const fileContent = fs.readFileSync(filePath, 'utf-8');
 
@@ -36,12 +36,13 @@ const getPostsSlug = () => {
     const files = getPostsFiles();
 
     return files.map((file) => ({
-        slug: getSlug(file)
+        slug: getSlug({ file })
     }));
 };
 
-const getPostData = async (slug:string) => {
+const getPostData = async ({ slug }: { slug:string }) => {
     const filePath = path.join(POST_DIRECTORY, `${slug}.md`);
+    
     try {
         const fileData = fs.readFileSync(filePath, 'utf-8');
 
