@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getPostData, getPostsSlug } from "../../../model/posts.model";
+import { getPostData, getPostsSlug } from "../../../models/posts.model";
 
 const generateStaticParans = () => {
     return getPostsSlug();
@@ -7,27 +7,26 @@ const generateStaticParans = () => {
 
 const PostPage = async ({ params }) => {
     const { slug } = await params;
-    
-    const post = await getPostData({ slug });
-    
-    if (!post) {
-        return <div>Post not found!</div>
+
+    try {
+        const post = await getPostData({ slug });
+
+        return (
+            <>  
+                <Link href='/'>Home</Link>
+                <h1>{post.title}</h1>
+                <div>
+                    <p>{post.date}</p>
+                </div>
+                <article>
+                    {post.content}
+                </article>
+            </>
+        );
+    } catch (error) {
+        return <div>{`${error.message}`}</div>
     }
-
-    return (
-        <>  
-            <Link href='/'>Home</Link>
-            <h1>{post.title}</h1>
-            <div>
-                <p>{post.date}</p>
-            </div>
-            <article>
-                {post.content}
-            </article>
-        </>
-    );
 };
-
 
 export {
     generateStaticParans

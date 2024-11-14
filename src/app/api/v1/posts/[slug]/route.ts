@@ -1,15 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getPostData } from '../../../../../model/posts.model';
+import { getPostData } from '../../../../../models/posts.model';
 
 const GET = async (_request, { params }) => {
     const { slug } = await params;
-    const post = await getPostData({ slug });
     
-    if (!post) return NextResponse.json({ message: `Post with slug ${slug} not found` }, { status: 404 });
-
-    return NextResponse.json(post);
+    try {
+        const post = await getPostData({ slug });
+        return NextResponse.json(post);
+    } catch (error) {
+        return NextResponse.json({ message: `${error.message}` }, { status: 404 });  
+    }
 };
 
+const POST = async (_request, { params }) => {
+    console.log(params);
+};
+
+
 export {
-    GET
+    GET,
+    POST
 };

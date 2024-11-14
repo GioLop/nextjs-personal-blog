@@ -1,12 +1,21 @@
 import path from 'node:path';
 import fs from  'node:fs';
 import matter from 'gray-matter';
-import { Post, PostIndex } from '../definitions/posts.definitions';
+import { NewPost, Post, PostIndex } from '../definitions/posts.definitions';
 import { getDateFormated } from '../lib/date.lib';
 import { remark } from 'remark';
 import html from 'remark-html';
 
 const POST_DIRECTORY = path.join(process.cwd(), 'posts');
+
+const writePostFile = ({
+    fileName,
+    fileData
+}:{ fileName: string, fileData:string }) => fs.writeFileSync(fileName, fileData, {
+    encoding: 'utf-8'
+});
+
+const readPostFile = ({ filePath }:{filePath:string}) => fs.readFileSync(filePath, 'utf-8');
 
 const getPostsFiles = () => fs.readdirSync(POST_DIRECTORY);
 
@@ -18,7 +27,7 @@ const getSortedPosts = () => {
     const postsData = files.map((file) => {
         const slug = getSlug({ file });
         const filePath = path.join(POST_DIRECTORY, file);
-        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        const fileContent = readPostFile({ filePath });
 
         const { data: { title, date }  } = matter(fileContent);
 
@@ -44,7 +53,7 @@ const getPostData = async ({ slug }: { slug:string }) => {
     const filePath = path.join(POST_DIRECTORY, `${slug}.md`);
     
     try {
-        const fileData = fs.readFileSync(filePath, 'utf-8');
+        const fileData = readPostFile({ filePath });
 
         const { data, content } = matter(fileData);
 
@@ -56,13 +65,17 @@ const getPostData = async ({ slug }: { slug:string }) => {
             ...data
         } as Post;    
     } catch (error) {
-        console.log(`Error while reading ${filePath} file: ${error.message} `);
-        return null
+        throw new Error(`Error while reading ${filePath} file: ${error.message} `);
     }
+};
+
+const createPost = async (post: NewPost) => {
+
 };
 
 export {
     getSortedPosts,
     getPostsSlug,
-    getPostData
+    getPostData,
+    createPost
 };

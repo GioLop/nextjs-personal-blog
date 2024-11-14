@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getSortedPosts } from "../model/posts.model";
+import { getSortedPosts } from "../models/posts.model";
 
 const IndexPage = () => {
     const posts = getSortedPosts();
