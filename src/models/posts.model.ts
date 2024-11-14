@@ -1,28 +1,27 @@
 import path from 'node:path';
-import fs from  'node:fs';
 import matter from 'gray-matter';
-import { NewPost, Post, PostIndex } from '../definitions/posts.definitions';
-import { getDateFormated } from '../lib/date.lib';
 import { remark } from 'remark';
 import html from 'remark-html';
+import remarkStringify from 'remark-stringify';
+
+import {
+    NewPost,
+    Post,
+    PostIndex,
+    PostUpdates
+} from '../definitions/posts.definitions';
+import {
+    writePostFile,
+    readPostFile,
+    getPostsFiles,
+    getSlug
+} from '../lib/fs.lib';
+import { getDateFormated } from '../lib/date.lib';
 
 const POST_DIRECTORY = path.join(process.cwd(), 'posts');
 
-const writePostFile = ({
-    fileName,
-    fileData
-}:{ fileName: string, fileData:string }) => fs.writeFileSync(fileName, fileData, {
-    encoding: 'utf-8'
-});
-
-const readPostFile = ({ filePath }:{filePath:string}) => fs.readFileSync(filePath, 'utf-8');
-
-const getPostsFiles = () => fs.readdirSync(POST_DIRECTORY);
-
-const getSlug = ({ file }: {file:string}) => file.replace(/\.md$/, '');
-
 const getSortedPosts = () => {
-    const files = getPostsFiles();
+    const files = getPostsFiles({ directoryPath: POST_DIRECTORY });
     
     const postsData = files.map((file) => {
         const slug = getSlug({ file });
@@ -42,7 +41,7 @@ const getSortedPosts = () => {
 };
 
 const getPostsSlug = () => {
-    const files = getPostsFiles();
+    const files = getPostsFiles({ directoryPath: POST_DIRECTORY });
 
     return files.map((file) => ({
         slug: getSlug({ file })
@@ -69,7 +68,22 @@ const getPostData = async ({ slug }: { slug:string }) => {
     }
 };
 
-const createPost = async (post: NewPost) => {
+const createPost = async ({ title, date, content }: NewPost) => {
+    const metadata = {
+        title,
+        date: new Date(date).toISOString()
+    };
+    const fileContent = matter.stringify(content, metadata);
+    const processedContent = await remark().use(remarkStringify).process(fileContent);
+    const fileName = title.toLocaleLowerCase().replace(' ', '_');
+    
+    writePostFile({
+        fileName,
+        fileData: processedContent.toString()
+    });
+};
+
+const updatePost = async (updates: PostUpdates) => {
 
 };
 
@@ -77,5 +91,6 @@ export {
     getSortedPosts,
     getPostsSlug,
     getPostData,
-    createPost
+    createPost,
+    updatePost
 };

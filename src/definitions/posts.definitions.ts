@@ -14,8 +14,16 @@ type NewPost = {
     content: string
 };
 
+type PostUpdates = {
+    slug: string,
+    title?: string,
+    date?: string,
+    content?: string
+}
+
 export type {
     PostIndex,
     Post,
-    NewPost
+    NewPost,
+    PostUpdates
 };
